@@ -1,15 +1,15 @@
 [{
   "primary_attribute": "Intelligence",
-  "secondary_attribute": "Strength",
-  "prompt_text": "A mysterious door blocks your path, with a riddle inscribed. What will you do?",
+  "secondary_attribute": "Agility",
+  "prompt_text": "You need to send a party member to do recon on the other team, who will you send?",
   "pass": {
-    "message": "You solved the riddle and pushed the door open. You may proceed."
+    "message": "Your party member was successful in collecting info and returned safely, here is what they learned: Jonathan Davis; Strength: 50 Intelligence: 50 Stamina: 10 Agility: 10 Fred Durst; Strength: 50 Intelligence: 10 Stamina: 30 Agility: 30 Solana SZA; Strength: 30 Intelligence: 40 Stamina: 20 Agility: 30 Soobin Choi; Strength: 20 Intelligence: 20 Stamina: 45 Agility: 35 Chappell Roan; Strength: 30 Intelligence: 30 Stamina: 30 Agility: 3 Sabrina Carpenter; Strength: 40 Intelligence: 20 Stamina: 30 Agility:   Beyoncé; Strength: 30 Intelligence: 30 Stamina: 30 Agility_: 3  Ariana Grande; Strength: 50 Intelligence: 30 Stamina: 20 Agility: 30 Theo James; Strength: 30 Intelligence: 40 Stamina: 30 Agility: 30 Anne Hathaway; strength_value=20 Intelligence: 20 tamina_value=30 Agility: 50"
   },
   "fail": {
-    "message": "You failed to solve the riddle and push the door open. You must find another way."
+    "message": "Your party member failed to collect information and was captured by the other team!"
   },
   "partial_pass": {
-    "message": "You managed to solve the riddle or push the door, but not both. You made some progress, but the door remains closed."
+    "message": "Your party member returned safely but was unable to learn anything."
   }
 },
   {

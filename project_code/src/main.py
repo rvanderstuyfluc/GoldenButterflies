@@ -222,8 +222,17 @@ class UserInputParser:
             print(f"\nYour party has {len(self.party)} members. You can add {self.max_party_size - len(self.party)} more.")
             print("Choose a character to add to your party:")
             for idx, character in enumerate(total_characters):
-                print(f"{idx + 1}. {character.name} - Strength: {character.strength.value}, Intelligence: {character.intelligence.value}, Stamina: {character.stamina.value}, Agility: {character.agility.value}")
-            choice = int(self.parse("Enter the number of the character to add to your party: ")) - 1
+                print(f"{idx + 1}. {character.name}")
+            while True:  # Loop to ensure valid input
+                try:
+                    choice = int(self.parse("Enter the number of the character to add to your party: ")) - 1
+                    if 0 <= choice < len(total_characters):  # Check if choice is within valid range
+                        break
+                    else:
+                        print(f"Invalid choice. Please enter a number between 1 and {len(total_characters)}.")
+                except ValueError:
+                    print("Invalid input. Please enter a valid number.")
+            #choice = int(self.parse("Enter the number of the character to add to your party: ")) - 1
             selected_character = total_characters[choice]
             if selected_character in self.party:
                 print(f"{selected_character.name} is already in your party. Please choose a different character.")
@@ -235,7 +244,7 @@ class UserInputParser:
         opposing_team = unchosen_characters
         print("\nOpposing team consists of:")
         for character in opposing_team:
-            print(f"{character.name} - Strength: {character.strength.value}, Intelligence: {character.intelligence.value}, Stamina: {character.stamina.value}, Agility: {character.agility.value}")
+            print(f"{character.name}")
 
         return self.party, opposing_team
         
@@ -267,7 +276,7 @@ def start_game():
     chosen_party, opposing_team = parser.make_your_party(total_characters)
     print(f"\nYou have chosen the following characters for your party:")
     for character in chosen_party:
-        print(f"{character.name}")
+        print(f"{character.name} - Strength: {character.strength.value}, Intelligence: {character.intelligence.value}, Stamina: {character.stamina.value}, Agility: {character.agility.value}")
 
     # Load events from the JSON file
     events = load_events_from_json('project_code/location_events/location_1.json')
