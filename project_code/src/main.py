@@ -82,36 +82,17 @@ class Event:
             self.status = EventStatus.FAIL
             print(self.fail_message)
 
-event1_data = {
-    'primary_attribute': 'Strength',
-    'secondary_attribute': 'Stamina',
-    'prompt_text': "A massive boulder blocks your way. You need to push it out of the way!",
-    'pass': {'message': "You pushed the boulder successfully!"},
-    'fail': {'message': "You couldn't move the boulder, you got exhausted."},
-    'partial_pass': {'message': "You moved the boulder a little, but you are exhausted."}
-}
-
-event2_data = {
-    'primary_attribute': 'Intelligence',
-    'secondary_attribute': 'Agility',
-    'prompt_text': "A riddle appears. Solve it to proceed!",
-    'pass': {'message': "You solved the riddle quickly!"},
-    'fail': {'message': "You couldn't solve the riddle in time!"},
-    'partial_pass': {'message': "You solved part of the riddle, but not enough."}
-}
-
-event1 = Event(event1_data)
-event2 = Event(event2_data)
-
 class Location:
     def __init__(self, events: List[Event]):
         self.events = events
+        self.max_events = 3 
 
     def get_event(self) -> Event:
         return random.choice(self.events)
-    
-location1 = Location(events=[event1, event2])
 
+    def is_completed(self, completed_events: int) -> bool:
+        return completed_events >= self.max_events
+    
 class Game:
     def __init__(self, parser, characters: List[Character], locations: List[Location], chosen_party, opposing_team):
         self.is_invisible = None
@@ -124,6 +105,8 @@ class Game:
         self.max_rounds = 10  # Set a limit for the game
         self.chosen_part = chosen_party
         self.opposing_team = opposing_team
+        self.completed_events = 0  # Track how many events have been completed in the current location
+        self.current_location = locations[0]  # Start with the first location
 
 
     def add_character_to_party(self):
@@ -144,6 +127,9 @@ class Game:
             event = location.get_event()
 
             event.execute(self.party, self.parser)
+            # If the number of completed events exceeds the threshold, move to the next location
+            if location.is_completed(self.completed_events):
+                self.move_to_new_location()
 
             if self.round_count == 6:
                 self.trigger_special_event()
@@ -154,6 +140,15 @@ class Game:
             if self.is_invisible:
                 self.deactivate_invisibility()
         print("Game Over.")
+
+    def move_to_new_location(self):
+        print("\nYou have completed the required number of events. Moving to a new location...\n")
+        
+        # Move to the next location
+        next_location = self.locations[(self.locations.index(self.current_location) + 1) % len(self.locations)]
+        self.current_location = next_location
+        self.completed_events = 0  # Reset the event counter for the new location
+        print(f"Now at a new location! ({self.current_location})")
 
     def check_game_over(self):
         if self.did_succeed():
@@ -202,11 +197,6 @@ class Game:
         self.is_invisible = False
         for member in self.party:
             member.is_invisible = False
-
-
-def activate_invisibility(self, player):
-    print(f"{player.name} becomes invisible! They avoid the next trap.")
-
 
 class UserInputParser:
     def __init__(self, max_party_size: int):
